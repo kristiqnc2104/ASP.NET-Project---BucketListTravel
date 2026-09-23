@@ -14,7 +14,7 @@ namespace BucketListTravel.Data.Models
 
         public DateTime? PlannedDate { get; set; }
 
-        [MaxLength(BucketListNotesMaxLength)]
+        [MaxLength(BucketListEntryNotesMaxLength)]
         public string? Notes { get; set; }
 
         public DateTime DateAdded { get; set; } = DateTime.Now;

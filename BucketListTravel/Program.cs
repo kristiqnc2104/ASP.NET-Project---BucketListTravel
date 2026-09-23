@@ -1,3 +1,6 @@
+using BucketListTravel.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace BucketListTravel
 {
     public class Program
@@ -6,9 +9,14 @@ namespace BucketListTravel
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string was not found.");
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            
+            builder.Services.AddDbContext<BucketListTravelDbContext>(options =>
+                options.UseSqlServer(connectionString));
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
