@@ -4,6 +4,7 @@ namespace BucketListTravel.Data.Models
 {
     public class Photo
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]

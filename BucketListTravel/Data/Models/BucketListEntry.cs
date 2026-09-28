@@ -5,15 +5,17 @@ namespace BucketListTravel.Data.Models
 {
     public class BucketListEntry
     {
+        [Key]
         public int Id { get; set; }
 
         public int DestinationId { get; set; }
+
         public Destination Destination { get; set; } = null!;
 
-        public VisitStatus Status { get; set; } = VisitStatus.WantToVisit;
+        public VisitStatus Status { get; set; }
 
         public DateTime? PlannedDate { get; set; }
-
+        
         [MaxLength(BucketListEntryNotesMaxLength)]
         public string? Notes { get; set; }
 

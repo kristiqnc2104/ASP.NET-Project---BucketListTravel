@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using static BucketListTravel.Common.EntityValidation;
 namespace BucketListTravel.Data.Models
 {
     public class Destination
@@ -8,19 +8,20 @@ namespace BucketListTravel.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(DestinationNameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(DestinationCountryMaxLength)]
         public string Country { get; set; } = null!;
 
-        [MaxLength(1000)]
+        [MaxLength(DestinationDescriptionMaxLength)]
         public string? Description { get; set; }
 
         public string? ImageUrl { get; set; }
 
         public int CategoryId { get; set; }
+
         public Category Category { get; set; } = null!;
 
         public ICollection<Photo> Photos { get; set; } = new List<Photo>();
