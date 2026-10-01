@@ -12,7 +12,7 @@ namespace BucketListTravel.Data.Models
 
         public Destination Destination { get; set; } = null!;
 
-        public VisitStatus Status { get; set; }
+        public VisitStatus Status { get; set; } = VisitStatus.WantToVisit;
 
         public DateTime? PlannedDate { get; set; }
         

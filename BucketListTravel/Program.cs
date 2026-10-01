@@ -1,4 +1,6 @@
 using BucketListTravel.Data;
+using BucketListTravel.Services;
+using BucketListTravel.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BucketListTravel
@@ -16,7 +18,9 @@ namespace BucketListTravel
             
             builder.Services.AddDbContext<BucketListTravelDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            
+
+            builder.Services.AddScoped<IDestinationService, DestinationService>();
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

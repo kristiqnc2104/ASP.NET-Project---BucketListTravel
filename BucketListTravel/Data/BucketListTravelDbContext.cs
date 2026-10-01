@@ -1,6 +1,6 @@
-﻿using BucketListTravel.Data.Models;
+﻿using BucketListTravel.Data.Configurations;
+using BucketListTravel.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace BucketListTravel.Data
 {
@@ -15,7 +15,13 @@ namespace BucketListTravel.Data
         public DbSet<BucketListEntry> BucketListEntries { get; set; }
         public DbSet<Photo> Photos { get; set; }
 
-        
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            var catalogSeedConfiguration = new CatalogSeedConfiguration();
+            modelBuilder.ApplyConfiguration<Category>(catalogSeedConfiguration);
+            modelBuilder.ApplyConfiguration<Destination>(catalogSeedConfiguration);
+        }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BucketListTravel.Migrations
 {
     [DbContext(typeof(BucketListTravelDbContext))]
-    [Migration("20260923170926_InitialCreate")]
+    [Migration("20261001102355_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
