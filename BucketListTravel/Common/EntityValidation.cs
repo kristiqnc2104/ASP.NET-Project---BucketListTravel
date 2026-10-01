@@ -16,5 +16,6 @@
         //Photo
         public const int PhotoCaptionMaxLength = 200;
 
+       
     }
 }
