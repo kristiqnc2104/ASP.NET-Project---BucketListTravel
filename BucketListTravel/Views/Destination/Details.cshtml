@@ -1,0 +1,57 @@
+﻿@model BucketListTravel.ViewModels.Destinations.DestinationDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">&larr; Back to Destinations</a>
+</div>
+
+<div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+        <div class="card details-card">
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="details-main-image" alt="@Model.Name">
+            }
+            else
+            {
+                <div class="details-image-placeholder">No image available</div>
+            }
+
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card details-card">
+            <div class="card-body p-4">
+                <span class="badge bg-secondary mb-2">@Model.CategoryName</span>
+                <h1 class="mb-1">@Model.Name</h1>
+                <p class="text-muted">@Model.Country</p>
+
+                <h2 class="h5 mt-4">About this destination</h2>
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p class="details-description">@Model.Description</p>
+                }
+                else
+                {
+                    <p class="text-muted">No description is available yet.</p>
+                }
+
+                <hr />
+                @if (Model.IsInBucketList)
+                {
+                    <span class="badge bg-success">Already in your bucket list</span>
+                }
+                else
+                {
+                    <form asp-controller="BucketList" asp-action="Add" asp-route-destinationId="@Model.Id" method="post">
+                        <button type="submit" class="btn btn-success">Add to my bucket list</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,22 +1,139 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #fffdf5;
 }
+
+.create-page,
+.edit-page {
+    color: #26354a;
+}
+
+.create-header,
+.edit-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.create-header h1,
+.edit-header h1 {
+    color: #203b5b;
+    font-weight: 600;
+}
+
+.create-card,
+.edit-card,
+.details-card {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.65rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(32, 59, 91, 0.06);
+}
+
+.create-card .card-header,
+.edit-card .card-header {
+    padding: 1rem 1.25rem;
+    background-color: #fff;
+    border-bottom-color: #e9edf2;
+}
+
+.destination-preview-placeholder,
+.destination-preview-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.destination-preview-image {
+    object-fit: cover;
+}
+
+.manage-page {
+    color: #26354a;
+}
+
+.manage-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.manage-header h1 {
+    color: #203b5b;
+    font-weight: 600;
+}
+
+.manage-card {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.65rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(32, 59, 91, 0.06);
+}
+
+.manage-card .card-header,
+.manage-card .card-footer {
+    padding: 0.9rem 1rem;
+    background-color: #fff;
+    border-color: #e9edf2;
+}
+
+.manage-table thead th {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    color: #53657a;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.manage-table tbody td {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+}
+
+.manage-category {
+    font-weight: 500;
+}
+
+.manage-empty-state {
+    border-style: dashed;
+    box-shadow: none;
+}
+
+.details-description {
+    white-space: pre-line;
+}
+
+.details-main-image,
+.details-image-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.details-main-image {
+    object-fit: cover;
+}
+
+.details-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    background-color: #f8f9fa;
+}
+

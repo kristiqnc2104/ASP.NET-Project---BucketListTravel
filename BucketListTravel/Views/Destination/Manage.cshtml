@@ -4,52 +4,80 @@
     ViewData["Title"] = "Manage Destinations";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Manage Destinations</h1>
-    <a asp-action="Create" class="btn btn-primary">Add New</a>
+<section class="manage-page">
+<div class="manage-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Manage Destinations</h1>
+        <p class="text-muted mb-0">Add, edit, or remove destinations from your list.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Destinations</a>
+        <a asp-action="Create" class="btn btn-primary">Add Destination</a>
+    </div>
 </div>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">No destinations yet.</div>
+    <div class="card manage-card manage-empty-state">
+        <div class="card-body text-center py-5">
+            <h2 class="h5">No destinations yet</h2>
+            <p class="text-muted mb-3">Add your first destination to get started.</p>
+            <a asp-action="Create" class="btn btn-primary">Add Destination</a>
+        </div>
+    </div>
 }
 else
 {
     <form asp-action="DeleteSelected" method="post" onsubmit="return confirm('Delete the selected destinations?');">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="selectAll" /></th>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>Category</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td><input type="checkbox" name="selectedIds" value="@item.Id" class="row-checkbox" /></td>
-                        <td>@item.Name</td>
-                        <td>@item.Country</td>
-                        <td>@item.CategoryName</td>
-                        <td class="text-end">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <button type="submit" class="btn btn-danger">Delete Selected</button>
+        <div class="card manage-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-semibold">Your destinations</span>
+                <span class="badge text-bg-secondary">@Model.Count() total</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 manage-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-3"><input type="checkbox" id="selectAll" class="form-check-input" aria-label="Select all destinations" /></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Country</th>
+                            <th scope="col">Category</th>
+                            <th scope="col" class="text-end pe-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-3"><input type="checkbox" name="selectedIds" value="@item.Id" class="row-checkbox form-check-input" aria-label="Select @item.Name" /></td>
+                                <td class="fw-medium">@item.Name</td>
+                                <td>@item.Country</td>
+                                <td><span class="badge bg-light text-dark border manage-category">@item.CategoryName</span></td>
+                                <td class="text-end pe-3">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center gap-2">
+                <span class="small text-muted">Select destinations to remove them.</span>
+                <button type="submit" class="btn btn-sm btn-danger">Delete Selected</button>
+            </div>
+        </div>
     </form>
 }
 
+</section>
+
 @section Scripts {
     <script>
-        document.getElementById('selectAll').addEventListener('change', function () {
-            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
-        });
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
+            });
+        }
     </script>
 }
