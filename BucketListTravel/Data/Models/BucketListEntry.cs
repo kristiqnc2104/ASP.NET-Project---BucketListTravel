@@ -10,7 +10,7 @@ namespace BucketListTravel.Data.Models
 
         public int DestinationId { get; set; }
 
-        public Destination Destination { get; set; } = null!;
+        public virtual Destination Destination { get; set; } = null!;
 
         public VisitStatus Status { get; set; } = VisitStatus.WantToVisit;
 

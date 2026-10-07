@@ -13,7 +13,8 @@ namespace BucketListTravel.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Destination> Destinations { get; set; }
         public DbSet<BucketListEntry> BucketListEntries { get; set; }
-        public DbSet<Photo> Photos { get; set; }
+
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +23,12 @@ namespace BucketListTravel.Data
             var catalogSeedConfiguration = new CatalogSeedConfiguration();
             modelBuilder.ApplyConfiguration<Category>(catalogSeedConfiguration);
             modelBuilder.ApplyConfiguration<Destination>(catalogSeedConfiguration);
+
+            modelBuilder.Entity<BucketListEntry>()
+                .HasOne(e => e.Destination)
+                .WithMany(d => d.BucketListEntries)
+                .HasForeignKey(e => e.DestinationId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -22,10 +22,8 @@ namespace BucketListTravel.Data.Models
 
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; } = null!;
+        public virtual Category Category { get; set; } = null!;
 
-        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
-
-        public ICollection<BucketListEntry> BucketListEntries { get; set; } = new List<BucketListEntry>();
+        public virtual ICollection<BucketListEntry> BucketListEntries { get; set; } = new List<BucketListEntry>();
     }
 }
