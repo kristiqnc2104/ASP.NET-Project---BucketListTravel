@@ -50,7 +50,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasIndex("DestinationId");
 
-                    b.ToTable("BucketListEntries");
+                    b.ToTable("BucketListEntries", (string)null);
                 });
 
             modelBuilder.Entity("BucketListTravel.Data.Models.Category", b =>
@@ -68,7 +68,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -130,7 +130,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Destinations");
+                    b.ToTable("Destinations", (string)null);
 
                     b.HasData(
                         new
@@ -270,32 +270,6 @@ namespace BucketListTravel.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BucketListTravel.Data.Models.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Caption")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("DestinationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DestinationId");
-
-                    b.ToTable("Photos");
-                });
-
             modelBuilder.Entity("BucketListTravel.Data.Models.BucketListEntry", b =>
                 {
                     b.HasOne("BucketListTravel.Data.Models.Destination", "Destination")
@@ -318,17 +292,6 @@ namespace BucketListTravel.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("BucketListTravel.Data.Models.Photo", b =>
-                {
-                    b.HasOne("BucketListTravel.Data.Models.Destination", "Destination")
-                        .WithMany("Photos")
-                        .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Destination");
-                });
-
             modelBuilder.Entity("BucketListTravel.Data.Models.Category", b =>
                 {
                     b.Navigation("Destinations");
@@ -337,8 +300,6 @@ namespace BucketListTravel.Migrations
             modelBuilder.Entity("BucketListTravel.Data.Models.Destination", b =>
                 {
                     b.Navigation("BucketListEntries");
-
-                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }
