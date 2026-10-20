@@ -20,6 +20,7 @@ namespace BucketListTravel
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IDestinationService, DestinationService>();
+            builder.Services.AddScoped<IBucketListService, BucketListService>();
 
             var app = builder.Build();
 
