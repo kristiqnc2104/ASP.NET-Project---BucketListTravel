@@ -18,7 +18,9 @@
 
             @if (Model.IsInBucketList)
             {
-                <span class="badge bg-success">In your list</span>
+                <form asp-controller="BucketList" asp-action="Remove" asp-route-destinationId="@Model.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove from list</button>
+                </form>
             }
             else
             {
