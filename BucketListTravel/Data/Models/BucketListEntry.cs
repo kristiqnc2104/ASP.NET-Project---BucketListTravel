@@ -1,4 +1,4 @@
-﻿using BucketListTravel.Data.Models.Enums;
+﻿using BucketListTravel.Common.Enums;
 using System.ComponentModel.DataAnnotations;
 using static BucketListTravel.Common.EntityValidation;
 namespace BucketListTravel.Data.Models
