@@ -3,8 +3,6 @@ using System;
 using BucketListTravel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
@@ -48,9 +46,10 @@ namespace BucketListTravel.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DestinationId");
+                    b.HasIndex("DestinationId")
+                        .IsUnique();
 
-                    b.ToTable("BucketListEntries", (string)null);
+                    b.ToTable("BucketListEntries");
                 });
 
             modelBuilder.Entity("BucketListTravel.Data.Models.Category", b =>
@@ -68,7 +67,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -130,7 +129,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Destinations", (string)null);
+                    b.ToTable("Destinations");
 
                     b.HasData(
                         new

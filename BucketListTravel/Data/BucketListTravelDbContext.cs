@@ -29,6 +29,10 @@ namespace BucketListTravel.Data
                 .WithMany(d => d.BucketListEntries)
                 .HasForeignKey(e => e.DestinationId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BucketListEntry>()
+                .HasIndex(e => e.DestinationId)
+                .IsUnique();
         }
     }
 }
