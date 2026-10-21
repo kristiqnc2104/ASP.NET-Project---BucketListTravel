@@ -1,8 +1,61 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Plan your next adventure";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-page">
+    <section class="home-hero row align-items-center g-4 g-lg-1">
+        <div class="col-lg-6">
+            <p class="home-eyebrow">YOUR NEXT CHAPTER STARTS SOMEWHERE</p>
+            <h1 class="home-title">The world is waiting.<br /><span>What’s on your list?</span></h1>
+            <p class="home-intro">Add & discover places worth dreaming about, then save the ones you want to experience. Your next great story starts with a destination.</p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <a class="btn btn-primary btn-lg" asp-controller="Destination" asp-action="Index">Explore destinations</a>
+                <a class="btn btn-outline-secondary btn-lg" asp-controller="BucketList" asp-action="Index">View my bucket list</a>
+            </div>
+            <p class="home-note mt-3 mb-0">Find inspiration. Make it yours. Start planning.</p>
+        </div>
+        <div class="col-lg-6">
+            <div class="home-hero-image" role="img" aria-label="Whitewashed houses overlooking the sea in Santorini">
+                <div class="home-image-caption">
+                    <span class="home-caption-label">A LITTLE INSPIRATION</span>
+                    <span class="home-caption-title">Santorini, Greece</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-how mt-5 pt-lg-4">
+        <div class="text-center mb-4">
+            <p class="home-eyebrow">DREAM IT. SAVE IT. GO.</p>
+            <h2 class="home-section-title">Turn “someday” into a plan</h2>
+        </div>
+        <div class="row g-3 g-lg-4">
+            <div class="col-md-4">
+                <article class="home-step h-100">
+                    <h3>Find your inspiration</h3>
+                    <p>Browse or add a handpicked collection of places, from iconic cities to quiet escapes.</p>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="home-step h-100">
+                    <h3>Build your list</h3>
+                    <p>Save the destinations you love and keep your travel dreams together in one place.</p>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="home-step h-100">
+                    <h3>Make it happen</h3>
+                    <p>Revisit your list whenever you’re ready to turn a saved idea into your next trip.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-cta mt-5">
+        <div>
+            <p class="home-eyebrow mb-1">THE ADVENTURE IS YOURS</p>
+            <h2 class="mb-0">Where will you go first?</h2>
+        </div>
+        <a class="btn btn-light btn-lg" asp-controller="Destination" asp-action="Index">Find your destination</a>
+    </section>
 </div>

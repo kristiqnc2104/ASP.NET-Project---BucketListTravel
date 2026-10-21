@@ -9,40 +9,40 @@
     <link rel="stylesheet" href="~/BucketListTravel.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BucketListTravel</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg site-navbar">
+            <div class="container">
+                <a class="navbar-brand site-brand" asp-controller="Home" asp-action="Index" aria-label="BucketListTravel home">
+                    <span>BucketList<span class="site-brand-accent">Travel</span></span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div id="mainNavbar" class="collapse navbar-collapse">
+                    <ul class="navbar-nav site-nav-links ms-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Destination" ? "active" : "")" asp-controller="Destination" asp-action="Index">Destinations</a>
                         </li>
-                        <li class="nav-item">
-                             <a class="nav-link text-dark" asp-controller="Destination" asp-action="Index">Destinations</a>
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link site-nav-cta @(ViewContext.RouteData.Values["controller"]?.ToString() == "BucketList" ? "active" : "")" asp-controller="BucketList" asp-action="Index">My Bucket List <span aria-hidden="true">→</span></a>
                         </li>
-                        
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - BucketListTravel - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <main role="main" class="container py-4 py-lg-5 flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer border-top bg-white text-muted">
+        <div class="container py-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+            <span>&copy; @DateTime.UtcNow.Year BucketListTravel</span>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

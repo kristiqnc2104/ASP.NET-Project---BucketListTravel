@@ -12,14 +12,219 @@ html {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-    position: relative;
-    min-height: 100%;
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background-color: #fffdf5;
 }
 
-body {
-    margin-bottom: 60px;
-    background-color: #fffdf5;
+.site-navbar {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    background-color: rgba(255, 255, 255, 0.97);
+    border-bottom: 1px solid #eee9dc;
+    box-shadow: 0 0.25rem 0.9rem rgba(32, 59, 91, 0.05);
+}
+
+.site-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #203b5b;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+}
+
+.site-brand:hover,
+.site-brand:focus {
+    color: #203b5b;
+}
+
+.site-brand-accent {
+    color: #b17442;
+}
+
+.site-nav-links {
+    gap: 0.35rem;
+}
+
+.site-navbar .site-nav-links .nav-link {
+    padding: 0.55rem 0.9rem;
+    color: #526174;
+    border-radius: 0.55rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.site-navbar .site-nav-links .nav-link:hover,
+.site-navbar .site-nav-links .nav-link.active:not(.site-nav-cta) {
+    color: #203b5b;
+    background-color: #f4f1e9;
+}
+
+.site-navbar .site-nav-links .site-nav-cta {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    color: #fff;
+    background-color: #203b5b;
+    font-weight: 600;
+}
+
+.site-navbar .site-nav-links .site-nav-cta:hover,
+.site-navbar .site-nav-links .site-nav-cta.active {
+    color: #fff;
+    background-color: #2d527b;
+}
+
+.site-nav-cta span {
+    margin-left: 0.3rem;
+}
+
+.site-navbar .navbar-toggler {
+    padding: 0.4rem 0.55rem;
+    border-color: #e2e8f0;
+    border-radius: 0.55rem;
+}
+
+@media (max-width: 991.98px) {
+    .site-nav-links {
+        align-items: stretch;
+        gap: 0.15rem;
+        padding-top: 0.75rem;
+    }
+
+    .site-navbar .site-nav-links .site-nav-cta {
+        margin-top: 0.35rem;
+        text-align: center;
+    }
+}
+
+.home-page {
+    color: #26354a;
+}
+
+.home-hero {
+    padding: clamp(1.5rem, 5vw, 4rem);
+    background-color: #fff;
+    border: 1px solid #eee9dc;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(32, 59, 91, 0.06);
+}
+
+.home-eyebrow {
+    color: #9a6d38;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.home-title {
+    color: #203b5b;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.home-title span {
+    color: #b17442;
+}
+
+.home-intro {
+    max-width: 34rem;
+    color: #5c6877;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.home-note {
+    color: #788392;
+    font-size: 0.9rem;
+}
+
+.home-hero-image {
+    position: relative;
+    min-height: 22rem;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, transparent 55%, rgba(18, 32, 46, 0.75)), url("https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=85") center / cover;
+}
+
+.home-image-caption {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+}
+
+.home-caption-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.home-caption-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.home-section-title {
+    color: #203b5b;
+    font-weight: 650;
+}
+
+.home-step {
+    padding: 1.5rem;
+    background-color: #fff;
+    border: 1px solid #eee9dc;
+    border-radius: 0.75rem;
+}
+
+.home-step h3 {
+    margin-top: 0.8rem;
+    color: #203b5b;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.home-step p {
+    margin-bottom: 0;
+    color: #657181;
+    line-height: 1.6;
+}
+
+.home-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.75rem 2rem;
+    color: #fff;
+    background-color: #203b5b;
+    border-radius: 0.85rem;
+}
+
+.home-cta .home-eyebrow {
+    color: #e8c99f;
+}
+
+@media (max-width: 575.98px) {
+    .home-hero-image {
+        min-height: 17rem;
+    }
+
+    .home-cta {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
 }
 
 .create-page,
