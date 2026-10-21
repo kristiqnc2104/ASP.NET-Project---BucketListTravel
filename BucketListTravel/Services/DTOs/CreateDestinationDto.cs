@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BucketListTravel.Services.DTOs
+﻿namespace BucketListTravel.Services.DTOs
 {
     public class CreateDestinationDto
     {

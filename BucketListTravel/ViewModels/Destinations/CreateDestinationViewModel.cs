@@ -6,11 +6,11 @@ namespace BucketListTravel.ViewModels.Destinations
 {
     public class CreateDestinationViewModel
     {
-        [Required]
+        [Required(ErrorMessage = ViewModelDestinationNameRequiredErrorMessage)]
         [MaxLength(ViewModelDestinationNameMaxLength)]
         public string Name { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = ViewModelDestinationCountryRequiredErrorMessage)]
         [MaxLength(ViewModelDestinationCountryMaxLength)]
         public string Country { get; set; } = null!;
 
@@ -19,7 +19,7 @@ namespace BucketListTravel.ViewModels.Destinations
 
         public string? ImageUrl { get; set; }
 
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = ViewModelDestinationCategoryRequiredErrorMessage)]
         public int CategoryId { get; set; }
 
 

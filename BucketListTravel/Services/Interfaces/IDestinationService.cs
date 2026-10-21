@@ -8,6 +8,8 @@ namespace BucketListTravel.Services.Interfaces
 
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
 
+        Task<bool> CategoryExistsAsync(int categoryId);
+
         Task CreateDestinationAsync(CreateDestinationDto model);
         
         Task<DestinationForEditDto?> GetDestinationByIdAsync(int id);

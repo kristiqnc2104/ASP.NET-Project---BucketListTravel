@@ -1,12 +1,10 @@
-﻿using BucketListTravel.Data;
-using BucketListTravel.Data.Models;
-using BucketListTravel.Services.DTOs;
+﻿using BucketListTravel.Services.DTOs;
 using BucketListTravel.Services.Interfaces;
 using BucketListTravel.ViewModels.Destinations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using static BucketListTravel.Common.UIConstants;
+using static BucketListTravel.Common.ViewModelValidation;
 
 namespace BucketListTravel.Controllers
 {
@@ -52,6 +50,11 @@ namespace BucketListTravel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateDestinationViewModel viewModel)
         {
+            if (viewModel.CategoryId > 0 && !await _destinationService.CategoryExistsAsync(viewModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(viewModel.CategoryId), ViewModelDestinationCategoryNotFoundErrorMessage);
+            }
+
             if (!ModelState.IsValid)
             {
                 var categories = await _destinationService.GetAllCategoriesAsync();
@@ -106,6 +109,11 @@ namespace BucketListTravel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditDestinationViewModel viewModel)
         {
+            if (viewModel.CategoryId > 0 && !await _destinationService.CategoryExistsAsync(viewModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(viewModel.CategoryId), ViewModelDestinationCategoryNotFoundErrorMessage);
+            }
+
             if (!ModelState.IsValid)
             {
                 var categories = await _destinationService.GetAllCategoriesAsync();

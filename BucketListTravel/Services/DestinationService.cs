@@ -47,6 +47,11 @@ namespace BucketListTravel.Services
             return categories;
         }
 
+        public Task<bool> CategoryExistsAsync(int categoryId)
+        {
+            return _context.Categories.AnyAsync(c => c.Id == categoryId);
+        }
+
         public async Task<IEnumerable<GetAllDestinationsDto>> GetAllDestinationsAsync()
         {
             IEnumerable<GetAllDestinationsDto> allDestinationsDtos = await _context.Destinations
