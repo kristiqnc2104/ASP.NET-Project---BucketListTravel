@@ -17,7 +17,7 @@ namespace BucketListTravel.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.31")
+                .HasAnnotation("ProductVersion", "8.0.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -166,15 +166,6 @@ namespace BucketListTravel.Migrations
                         new
                         {
                             Id = 3,
-                            CategoryId = 1,
-                            Country = "Italy",
-                            Description = "Dramatic coastal cliffs, colorful villages, and clear Mediterranean waters.",
-                            ImageUrl = "https://images.unsplash.com/photo-1533105079780-92b9be482077",
-                            Name = "Amalfi Coast"
-                        },
-                        new
-                        {
-                            Id = 4,
                             CategoryId = 2,
                             Country = "Canada",
                             Description = "Glacial lakes, alpine trails, and mountain scenery in the Canadian Rockies.",
@@ -183,16 +174,7 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 5,
-                            CategoryId = 2,
-                            Country = "Tanzania",
-                            Description = "Vast plains and unforgettable wildlife encounters during the great migration.",
-                            ImageUrl = "https://images.unsplash.com/photo-1516426122078-c23e76319801",
-                            Name = "Serengeti National Park"
-                        },
-                        new
-                        {
-                            Id = 6,
+                            Id = 4,
                             CategoryId = 2,
                             Country = "Ecuador",
                             Description = "Unique wildlife, volcanic landscapes, and extraordinary snorkeling opportunities.",
@@ -201,16 +183,7 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 7,
-                            CategoryId = 3,
-                            Country = "Argentina",
-                            Description = "Remote wilderness with glaciers, granite peaks, and world-class trekking routes.",
-                            ImageUrl = "https://images.unsplash.com/photo-1530789253388-582c481c54b0",
-                            Name = "Patagonia"
-                        },
-                        new
-                        {
-                            Id = 8,
+                            Id = 5,
                             CategoryId = 3,
                             Country = "Switzerland",
                             Description = "An alpine base for paragliding, hiking, skiing, and breathtaking mountain views.",
@@ -219,7 +192,7 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 6,
                             CategoryId = 3,
                             Country = "New Zealand",
                             Description = "The adventure capital of New Zealand, surrounded by lakes and dramatic peaks.",
@@ -228,7 +201,7 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 7,
                             CategoryId = 4,
                             Country = "Japan",
                             Description = "Historic temples, traditional gardens, and seasonal Japanese culture.",
@@ -237,16 +210,7 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 11,
-                            CategoryId = 4,
-                            Country = "Jordan",
-                            Description = "An ancient city carved into rose-colored cliffs and reached through the Siq.",
-                            ImageUrl = "https://images.unsplash.com/photo-1548786811-dd6e453ccca7",
-                            Name = "Petra"
-                        },
-                        new
-                        {
-                            Id = 12,
+                            Id = 8,
                             CategoryId = 4,
                             Country = "Peru",
                             Description = "A remarkable Inca citadel set high in the Andes above the Sacred Valley.",
@@ -255,7 +219,7 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 13,
+                            Id = 9,
                             CategoryId = 5,
                             Country = "Spain",
                             Description = "Gaudí architecture, lively neighborhoods, Mediterranean beaches, and tapas.",
@@ -264,21 +228,12 @@ namespace BucketListTravel.Migrations
                         },
                         new
                         {
-                            Id = 14,
+                            Id = 10,
                             CategoryId = 5,
                             Country = "Türkiye",
                             Description = "A crossroads of continents known for its markets, mosques, and rich cuisine.",
                             ImageUrl = "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200",
                             Name = "Istanbul"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CategoryId = 5,
-                            Country = "United States",
-                            Description = "Distinctive Creole food, jazz, and historic architecture along the Mississippi.",
-                            ImageUrl = "https://images.unsplash.com/photo-1548013146-72479768bada",
-                            Name = "New Orleans"
                         });
                 });
 

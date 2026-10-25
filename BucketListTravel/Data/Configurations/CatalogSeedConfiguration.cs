@@ -20,6 +20,7 @@ namespace BucketListTravel.Data.Configurations
 
         public void Configure(EntityTypeBuilder<Destination> builder)
         {
+            //Sample data for destinations to show that the catalog is working
             builder.HasData(
                 new Destination
                 {
@@ -42,15 +43,6 @@ namespace BucketListTravel.Data.Configurations
                 new Destination
                 {
                     Id = 3,
-                    Name = "Amalfi Coast",
-                    Country = "Italy",
-                    Description = "Dramatic coastal cliffs, colorful villages, and clear Mediterranean waters.",
-                    ImageUrl = "https://images.unsplash.com/photo-1533105079780-92b9be482077",
-                    CategoryId = 1
-                },
-                new Destination
-                {
-                    Id = 4,
                     Name = "Banff National Park",
                     Country = "Canada",
                     Description = "Glacial lakes, alpine trails, and mountain scenery in the Canadian Rockies.",
@@ -59,16 +51,7 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 5,
-                    Name = "Serengeti National Park",
-                    Country = "Tanzania",
-                    Description = "Vast plains and unforgettable wildlife encounters during the great migration.",
-                    ImageUrl = "https://images.unsplash.com/photo-1516426122078-c23e76319801",
-                    CategoryId = 2
-                },
-                new Destination
-                {
-                    Id = 6,
+                    Id = 4,
                     Name = "Galápagos Islands",
                     Country = "Ecuador",
                     Description = "Unique wildlife, volcanic landscapes, and extraordinary snorkeling opportunities.",
@@ -77,16 +60,7 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 7,
-                    Name = "Patagonia",
-                    Country = "Argentina",
-                    Description = "Remote wilderness with glaciers, granite peaks, and world-class trekking routes.",
-                    ImageUrl = "https://images.unsplash.com/photo-1530789253388-582c481c54b0",
-                    CategoryId = 3
-                },
-                new Destination
-                {
-                    Id = 8,
+                    Id = 5,
                     Name = "Interlaken",
                     Country = "Switzerland",
                     Description = "An alpine base for paragliding, hiking, skiing, and breathtaking mountain views.",
@@ -95,7 +69,7 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 9,
+                    Id = 6,
                     Name = "Queenstown",
                     Country = "New Zealand",
                     Description = "The adventure capital of New Zealand, surrounded by lakes and dramatic peaks.",
@@ -104,7 +78,7 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 10,
+                    Id = 7,
                     Name = "Kyoto",
                     Country = "Japan",
                     Description = "Historic temples, traditional gardens, and seasonal Japanese culture.",
@@ -113,16 +87,7 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 11,
-                    Name = "Petra",
-                    Country = "Jordan",
-                    Description = "An ancient city carved into rose-colored cliffs and reached through the Siq.",
-                    ImageUrl = "https://images.unsplash.com/photo-1548786811-dd6e453ccca7",
-                    CategoryId = 4
-                },
-                new Destination
-                {
-                    Id = 12,
+                    Id = 8,
                     Name = "Machu Picchu",
                     Country = "Peru",
                     Description = "A remarkable Inca citadel set high in the Andes above the Sacred Valley.",
@@ -131,7 +96,7 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 13,
+                    Id = 9,
                     Name = "Barcelona",
                     Country = "Spain",
                     Description = "Gaudí architecture, lively neighborhoods, Mediterranean beaches, and tapas.",
@@ -140,20 +105,11 @@ namespace BucketListTravel.Data.Configurations
                 },
                 new Destination
                 {
-                    Id = 14,
+                    Id = 10,
                     Name = "Istanbul",
                     Country = "Türkiye",
                     Description = "A crossroads of continents known for its markets, mosques, and rich cuisine.",
                     ImageUrl = "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200",
-                    CategoryId = 5
-                },
-                new Destination
-                {
-                    Id = 15,
-                    Name = "New Orleans",
-                    Country = "United States",
-                    Description = "Distinctive Creole food, jazz, and historic architecture along the Mississippi.",
-                    ImageUrl = "https://images.unsplash.com/photo-1548013146-72479768bada",
                     CategoryId = 5
                 });
         }

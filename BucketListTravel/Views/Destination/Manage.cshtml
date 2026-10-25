@@ -12,7 +12,10 @@
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a asp-action="Index" class="btn btn-outline-secondary">Back to Destinations</a>
-        <a asp-action="Create" class="btn btn-primary">Add Destination</a>
+            @if (Model.Any())
+            {
+                <a asp-action="Create" class="btn btn-primary">Add Destination</a>
+            }
     </div>
 </div>
 

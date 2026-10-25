@@ -1,5 +1,6 @@
 using BucketListTravel.Common.Enums;
 using static BucketListTravel.Common.ViewModelValidation;
+using static BucketListTravel.Common.EntityValidation;
 using System.ComponentModel.DataAnnotations;
 
 namespace BucketListTravel.ViewModels.BucketListEntries
@@ -18,7 +19,7 @@ namespace BucketListTravel.ViewModels.BucketListEntries
         [Display(Name = "Planned date")]
         public DateTime? PlannedDate { get; set; }
 
-        [MaxLength(ViewModelBucketListEntryNotesMaxLength)]
+        [MaxLength(BucketListEntryNotesMaxLength)]
         public string? Notes { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

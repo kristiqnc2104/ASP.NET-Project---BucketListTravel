@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using static BucketListTravel.Common.ViewModelValidation;
+using static BucketListTravel.Common.EntityValidation;
 
 namespace BucketListTravel.ViewModels.Destinations
 {
@@ -9,14 +10,14 @@ namespace BucketListTravel.ViewModels.Destinations
         public int Id { get; set; }
 
         [Required(ErrorMessage = ViewModelDestinationNameRequiredErrorMessage)]
-        [MaxLength(ViewModelDestinationNameMaxLength)]
+        [MaxLength(DestinationNameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = ViewModelDestinationCountryRequiredErrorMessage)]
-        [MaxLength(ViewModelDestinationCountryMaxLength)]
+        [MaxLength(DestinationCountryMaxLength)]
         public string Country { get; set; } = null!;
 
-        [MaxLength(ViewModelDestinationDescriptionMaxLength)]
+        [MaxLength(DestinationDescriptionMaxLength)]
         public string? Description { get; set; }
 
         public string? ImageUrl { get; set; }
