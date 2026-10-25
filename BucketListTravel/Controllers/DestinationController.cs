@@ -1,13 +1,16 @@
 ﻿using BucketListTravel.Services.DTOs;
 using BucketListTravel.Services.Interfaces;
 using BucketListTravel.ViewModels.Destinations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 using static BucketListTravel.Common.UIConstants;
 using static BucketListTravel.Common.ViewModelValidation;
 
 namespace BucketListTravel.Controllers
 {
+    
     public class DestinationController : Controller
     {
         private readonly IDestinationService _destinationService;
@@ -17,24 +20,44 @@ namespace BucketListTravel.Controllers
             _destinationService = destinationService;
         }
 
+        private string? GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var destinations = await _destinationService.GetAllDestinationsAsync();
+            var userId = GetCurrentUserId();
+
+            var destinations = await _destinationService.GetAllDestinationsAsync(userId);
+
             return View(MapToViewModels(destinations));
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Manage()
         {
-            var destinations = await _destinationService.GetAllDestinationsAsync();
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
+            var destinations = await _destinationService.GetMyDestinationsAsync(userId);
+
             return View(MapToViewModels(destinations));
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             var categories = await _destinationService.GetAllCategoriesAsync();
+
             var viewModel = new CreateDestinationViewModel
             {
                 Categories = categories.Select(c => new SelectListItem
@@ -43,13 +66,22 @@ namespace BucketListTravel.Controllers
                     Text = c.Name
                 })
             };
+
             return View(viewModel);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateDestinationViewModel viewModel)
         {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
             if (viewModel.CategoryId > 0 && !await _destinationService.CategoryExistsAsync(viewModel.CategoryId))
             {
                 ModelState.AddModelError(nameof(viewModel.CategoryId), ViewModelDestinationCategoryNotFoundErrorMessage);
@@ -58,11 +90,13 @@ namespace BucketListTravel.Controllers
             if (!ModelState.IsValid)
             {
                 var categories = await _destinationService.GetAllCategoriesAsync();
+
                 viewModel.Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.Name
                 });
+
                 return View(viewModel);
             }
 
@@ -75,19 +109,30 @@ namespace BucketListTravel.Controllers
                 CategoryId = viewModel.CategoryId
             };
 
-            await _destinationService.CreateDestinationAsync(createDto);
+            await _destinationService.CreateDestinationAsync(createDto, userId);
             return RedirectToAction(nameof(Manage));
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var destination = await _destinationService.GetDestinationByIdAsync(id);
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
+            var destination = await _destinationService.GetDestinationByIdAsync(id, userId);
+
             if (destination == null)
             {
                 return NotFound();
             }
+
             var categories = await _destinationService.GetAllCategoriesAsync();
+
             var viewModel = new EditDestinationViewModel
             {
                 Id = destination.Id,
@@ -105,10 +150,18 @@ namespace BucketListTravel.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditDestinationViewModel viewModel)
         {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
             if (viewModel.CategoryId > 0 && !await _destinationService.CategoryExistsAsync(viewModel.CategoryId))
             {
                 ModelState.AddModelError(nameof(viewModel.CategoryId), ViewModelDestinationCategoryNotFoundErrorMessage);
@@ -117,11 +170,13 @@ namespace BucketListTravel.Controllers
             if (!ModelState.IsValid)
             {
                 var categories = await _destinationService.GetAllCategoriesAsync();
+
                 viewModel.Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.Name
                 });
+
                 return View(viewModel);
             }
 
@@ -135,7 +190,8 @@ namespace BucketListTravel.Controllers
                 CategoryId = viewModel.CategoryId
             };
 
-            var result = await _destinationService.UpdateDestinationAsync(updateDto);
+            var result = await _destinationService.UpdateDestinationAsync(updateDto, userId);
+
             if (!result)
             {
                 return NotFound();
@@ -144,23 +200,35 @@ namespace BucketListTravel.Controllers
             return RedirectToAction(nameof(Manage));
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSelected(IEnumerable<int> selectedIds)
         {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
             if (selectedIds == null || !selectedIds.Any())
             {
                 return RedirectToAction(nameof(Manage));
             }
 
-            await _destinationService.DeleteRangeAsync(selectedIds);
-            return RedirectToAction(nameof(Index));
+            await _destinationService.DeleteRangeAsync(selectedIds, userId);
+
+            return RedirectToAction(nameof(Manage));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            DestinationDetailsDto? destination = await _destinationService.GetDestinationDetailsAsync(id);
+            var userId = GetCurrentUserId();
+
+            DestinationDetailsDto? destination = await _destinationService.GetDestinationDetailsAsync(id, userId);
 
             if (destination == null)
             {
@@ -181,8 +249,9 @@ namespace BucketListTravel.Controllers
 
             return View(destinationDetailsViewModel);
         }
+
         private static IEnumerable<AllDestinationsIndexViewModel> MapToViewModels(
-    IEnumerable<GetAllDestinationsDto> dtos)
+            IEnumerable<GetAllDestinationsDto> dtos)
         {
             return dtos.Select(d => new AllDestinationsIndexViewModel
             {

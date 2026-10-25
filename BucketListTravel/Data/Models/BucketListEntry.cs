@@ -1,4 +1,5 @@
 ﻿using BucketListTravel.Common.Enums;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using static BucketListTravel.Common.EntityValidation;
 namespace BucketListTravel.Data.Models
@@ -20,5 +21,9 @@ namespace BucketListTravel.Data.Models
         public string? Notes { get; set; }
 
         public DateTime DateAdded { get; set; } = DateTime.Now;
+
+        public string UserId { get; set; } = null!;
+
+        public virtual IdentityUser User { get; set; } = null!;
     }
 }

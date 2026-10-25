@@ -1,10 +1,12 @@
 ﻿using BucketListTravel.Data.Configurations;
 using BucketListTravel.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BucketListTravel.Data
 {
-    public class BucketListTravelDbContext : DbContext
+    public class BucketListTravelDbContext : IdentityDbContext<IdentityUser>
     {
         public BucketListTravelDbContext(DbContextOptions<BucketListTravelDbContext> options)
             : base(options)
@@ -31,8 +33,22 @@ namespace BucketListTravel.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<BucketListEntry>()
-                .HasIndex(e => e.DestinationId)
+                .HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<BucketListEntry>()
+                .HasIndex(e => new { e.UserId, e.DestinationId })
                 .IsUnique();
+
+            modelBuilder.Entity<Destination>()
+                .HasOne(d => d.Owner)
+                .WithMany()
+                .HasForeignKey(d => d.OwnerId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

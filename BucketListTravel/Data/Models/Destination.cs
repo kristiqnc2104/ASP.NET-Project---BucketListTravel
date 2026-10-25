@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using static BucketListTravel.Common.EntityValidation;
 namespace BucketListTravel.Data.Models
 {
@@ -25,5 +26,9 @@ namespace BucketListTravel.Data.Models
         public virtual Category Category { get; set; } = null!;
 
         public virtual ICollection<BucketListEntry> BucketListEntries { get; set; } = new List<BucketListEntry>();
+
+        public string? OwnerId { get; set; }
+
+        public virtual IdentityUser? Owner { get; set; }
     }
 }

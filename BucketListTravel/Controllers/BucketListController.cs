@@ -4,9 +4,12 @@ using BucketListTravel.ViewModels.BucketListEntries;
 using BucketListTravel.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 using static BucketListTravel.Common.UIConstants;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BucketListTravel.Controllers
 {
+    [Authorize]
     public class BucketListController : Controller
     {
         private readonly IBucketListService _bucketListService;
@@ -16,10 +19,22 @@ namespace BucketListTravel.Controllers
             _bucketListService = bucketListService;
         }
 
+        private string? GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<BucketListEntryDto> bucketListEntriesDtos = await _bucketListService.GetAllAsync();
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
+            IEnumerable<BucketListEntryDto> bucketListEntriesDtos = await _bucketListService.GetAllAsync(userId);
 
             IEnumerable<AllBucketListEntriesIndexViewModel> allBucketListEntriesIndexViewModels = bucketListEntriesDtos
                 .Select(entry => new AllBucketListEntriesIndexViewModel
@@ -43,7 +58,15 @@ namespace BucketListTravel.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            BucketListEntryForEditDto? entry = await _bucketListService.GetForEditAsync(id);
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
+            BucketListEntryForEditDto? entry = await _bucketListService.GetForEditAsync(id, userId);
+
             if (entry == null)
             {
                 return NotFound();
@@ -65,7 +88,14 @@ namespace BucketListTravel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditBucketListEntryViewModel viewModel)
         {
-           if (!ModelState.IsValid)
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
+            if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
@@ -79,7 +109,7 @@ namespace BucketListTravel.Controllers
                 Notes = viewModel.Notes
             };
 
-            bool updated = await _bucketListService.UpdateAsync(dto);
+            bool updated = await _bucketListService.UpdateAsync(dto, userId);
             if (!updated)
             {
                 return NotFound();
@@ -92,12 +122,19 @@ namespace BucketListTravel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(int destinationId)
         {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
             if (destinationId <= 0)
             {
                 return BadRequest();
             }
 
-            bool isAdded = await _bucketListService.AddAsync(destinationId);
+            bool isAdded = await _bucketListService.AddAsync(destinationId, userId);
 
             if (!isAdded)
             {
@@ -111,16 +148,23 @@ namespace BucketListTravel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(int destinationId)
         {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Challenge();
+            }
+
             if (destinationId <= 0)
             {
                 return BadRequest();
             }
 
-            bool isRemoved = await _bucketListService.RemoveAsync(destinationId);
+            bool isRemoved = await _bucketListService.RemoveAsync(destinationId, userId);
 
             if (!isRemoved)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
             return RedirectToAction(nameof(Index));

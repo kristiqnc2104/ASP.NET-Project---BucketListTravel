@@ -1,6 +1,7 @@
 using BucketListTravel.Data;
 using BucketListTravel.Services;
 using BucketListTravel.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BucketListTravel
@@ -13,11 +14,25 @@ namespace BucketListTravel
 
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string was not found.");
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            
+            builder.Services.AddRazorPages();
+
             builder.Services.AddDbContext<BucketListTravelDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+            })
+                .AddEntityFrameworkStores<BucketListTravelDbContext>();
+
 
             builder.Services.AddScoped<IDestinationService, DestinationService>();
             builder.Services.AddScoped<IBucketListService, BucketListService>();
@@ -43,11 +58,13 @@ namespace BucketListTravel
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
             app.Run();
         }

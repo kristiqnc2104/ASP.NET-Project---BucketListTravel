@@ -16,7 +16,7 @@ namespace BucketListTravel.Services
             _context = context;
         }
 
-        public async Task CreateDestinationAsync(CreateDestinationDto model)
+        public async Task CreateDestinationAsync(CreateDestinationDto model, string userId)
         {
             Destination destination = new Destination
             {
@@ -24,16 +24,17 @@ namespace BucketListTravel.Services
                 Country = model.Country,
                 Description = model.Description,
                 ImageUrl = model.ImageUrl,
-                CategoryId = model.CategoryId
+                CategoryId = model.CategoryId,
+                OwnerId = userId
             };
 
             await _context.Destinations.AddAsync(destination);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteRangeAsync(IEnumerable<int> selectedIds)
+        public async Task DeleteRangeAsync(IEnumerable<int> selectedIds, string userId)
         {
-            var destinations = await _context.Destinations.Where(d => selectedIds.Contains(d.Id)).ToArrayAsync();
+            var destinations = await _context.Destinations.Where(d => selectedIds.Contains(d.Id) && d.OwnerId == userId).ToArrayAsync();
             _context.Destinations.RemoveRange(destinations);
             await _context.SaveChangesAsync();
         }
@@ -44,6 +45,7 @@ namespace BucketListTravel.Services
                 .AsNoTracking()
                 .OrderBy(c => c.Name)
                 .ToArrayAsync();
+
             return categories;
         }
 
@@ -52,7 +54,7 @@ namespace BucketListTravel.Services
             return _context.Categories.AnyAsync(c => c.Id == categoryId);
         }
 
-        public async Task<IEnumerable<GetAllDestinationsDto>> GetAllDestinationsAsync()
+        public async Task<IEnumerable<GetAllDestinationsDto>> GetAllDestinationsAsync(string? userId)
         {
             IEnumerable<GetAllDestinationsDto> allDestinationsDtos = await _context.Destinations
                 .AsNoTracking()
@@ -65,18 +67,40 @@ namespace BucketListTravel.Services
                     Country = d.Country,
                     ImageUrl = d.ImageUrl,
                     CategoryName = d.Category.Name,
-                    IsInBucketList = _context.BucketListEntries.Any(bl => bl.DestinationId == d.Id)
+                    IsInBucketList = _context.BucketListEntries.Any(ble => ble.DestinationId == d.Id && ble.UserId == userId)
                 })
                 .ToArrayAsync();
 
             return allDestinationsDtos;
         }
 
-        public async Task<DestinationForEditDto?> GetDestinationByIdAsync(int id)
+        public async Task<IEnumerable<GetAllDestinationsDto>> GetMyDestinationsAsync(string userId)
+        {
+            return await _context.Destinations
+                .AsNoTracking()
+                .Where(d => d.OwnerId == userId)
+                .OrderBy(d => d.Name)
+                .ThenBy(d => d.Country)
+                .Select(d => new GetAllDestinationsDto
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Country = d.Country,
+                    ImageUrl = d.ImageUrl,
+                    CategoryName = d.Category.Name,
+
+                    IsInBucketList = _context.BucketListEntries.Any(bl =>
+                        bl.DestinationId == d.Id &&
+                        bl.UserId == userId)
+                })
+                .ToArrayAsync();
+        }
+
+        public async Task<DestinationForEditDto?> GetDestinationByIdAsync(int id, string userId)
         {
             DestinationForEditDto? destinationForEdit = await _context.Destinations
                 .AsNoTracking()
-                .Where(d => d.Id == id)
+                .Where(d => d.Id == id && d.OwnerId == userId)
                 .Select(d => new DestinationForEditDto
                 {
                     Id = d.Id,
@@ -92,7 +116,7 @@ namespace BucketListTravel.Services
             return destinationForEdit;
         }
 
-        public async Task<DestinationDetailsDto?> GetDestinationDetailsAsync(int id)
+        public async Task<DestinationDetailsDto?> GetDestinationDetailsAsync(int id, string? userId)
         {
             DestinationDetailsDto? destinationDetails = await _context.Destinations
                 .AsNoTracking()
@@ -105,20 +129,23 @@ namespace BucketListTravel.Services
                     Description = d.Description,
                     ImageUrl = d.ImageUrl,
                     CategoryName = d.Category.Name,
-                    IsInBucketList = _context.BucketListEntries.Any(bl => bl.DestinationId == d.Id)
+                    IsInBucketList = _context.BucketListEntries.Any(ble => ble.DestinationId == d.Id && ble.UserId == userId)
                 })
                 .FirstOrDefaultAsync();
 
             return destinationDetails;
         }
 
-        public async Task<bool> UpdateDestinationAsync(UpdateDestinationDto model)
+        public async Task<bool> UpdateDestinationAsync(UpdateDestinationDto model, string userId)
         {
-            Destination? destination = await _context.Destinations.FindAsync(model.Id);
+            var destination = await _context.Destinations
+                .FirstOrDefaultAsync(d => d.Id == model.Id && d.OwnerId == userId);
+            
             if (destination == null)
             {
                 return false;
             }
+            
             destination.Name = model.Name;
             destination.Country = model.Country;
             destination.Description = model.Description;
@@ -126,6 +153,7 @@ namespace BucketListTravel.Services
             destination.CategoryId = model.CategoryId;
 
             await _context.SaveChangesAsync();
+
             return true;    
         }
     }

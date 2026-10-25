@@ -30,6 +30,7 @@
                         <li class="nav-item ms-lg-2">
                             <a class="nav-link site-nav-cta @(ViewContext.RouteData.Values["controller"]?.ToString() == "BucketList" ? "active" : "")" asp-controller="BucketList" asp-action="Index">My Bucket List <span aria-hidden="true">→</span></a>
                         </li>
+                        @await Html.PartialAsync("_LoginPartial")
                     </ul>
                 </div>
             </div>
