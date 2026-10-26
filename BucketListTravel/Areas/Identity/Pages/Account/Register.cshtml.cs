@@ -71,6 +71,14 @@ public class RegisterModel : PageModel
     public class InputModel
     {
         /// <summary>
+        ///     Property for username created by me.
+        /// </summary>
+        [Required]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 30 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Username can contain only letters, numbers, and underscores.")]
+        [Display(Name = "Username")]
+        public string UserName { get; set; } = default!;
+        /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
@@ -114,7 +122,7 @@ public class RegisterModel : PageModel
         {
             var user = CreateUser();
 
-            await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+            await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
             var result = await _userManager.CreateAsync(user, Input.Password);
 

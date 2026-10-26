@@ -10,5 +10,7 @@
         public const string ViewModelBucketListEntryStatusRequiredErrorMessage = "Status is required.";
         public const string ViewModelPlannedDateRequiredErrorMessage = "A planned date is required when the status is Planned.";
         public const string ViewModelPlannedDateInPastErrorMessage = "The planned date cannot be in the past.";
+        public const string ViewModelDestinationImageUrlMaxLengthErrorMessage = "The image URL cannot exceed {1} characters.";
+        public const string ViewModelDestinationImageUrlInvalidErrorMessage = "The image URL is not valid.";
     }
 }

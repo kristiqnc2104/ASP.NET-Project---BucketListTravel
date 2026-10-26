@@ -19,6 +19,7 @@ namespace BucketListTravel.Data.Models
         [MaxLength(DestinationDescriptionMaxLength)]
         public string? Description { get; set; }
 
+        [MaxLength(DestinationImageUrlMaxLength)]
         public string? ImageUrl { get; set; }
 
         public int CategoryId { get; set; }

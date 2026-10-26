@@ -18,6 +18,8 @@ namespace BucketListTravel.ViewModels.Destinations
         [MaxLength(DestinationDescriptionMaxLength)]
         public string? Description { get; set; }
 
+        [MaxLength(DestinationImageUrlMaxLength, ErrorMessage = ViewModelDestinationImageUrlMaxLengthErrorMessage)]
+        [Url(ErrorMessage = ViewModelDestinationImageUrlInvalidErrorMessage)]
         public string? ImageUrl { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = ViewModelDestinationCategoryRequiredErrorMessage)]

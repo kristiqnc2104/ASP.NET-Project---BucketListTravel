@@ -12,10 +12,6 @@
         public const int DestinationNameMaxLength = 100;
         public const int DestinationCountryMaxLength = 100;
         public const int DestinationDescriptionMaxLength = 1000;
-
-        //Photo
-        public const int PhotoCaptionMaxLength = 200;
-
-       
+        public const int DestinationImageUrlMaxLength = 2048;
     }
 }
