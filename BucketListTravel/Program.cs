@@ -1,4 +1,6 @@
 using BucketListTravel.Data;
+using BucketListTravel.Repository;
+using BucketListTravel.Repository.Contracts;
 using BucketListTravel.Services;
 using BucketListTravel.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +35,9 @@ namespace BucketListTravel
             })
                 .AddEntityFrameworkStores<BucketListTravelDbContext>();
 
+            builder.Services.AddScoped<IDestinationRepository, DestinationRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IBucketListRepository, BucketListRepository>();
 
             builder.Services.AddScoped<IDestinationService, DestinationService>();
             builder.Services.AddScoped<IBucketListService, BucketListService>();

@@ -1,6 +1,7 @@
 ﻿
 using BucketListTravel.Data;
 using BucketListTravel.Data.Models;
+using BucketListTravel.Repository.Contracts;
 using BucketListTravel.Services.DTOs;
 using BucketListTravel.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +10,18 @@ namespace BucketListTravel.Services
 {
     public class DestinationService : IDestinationService
     {
-        private readonly BucketListTravelDbContext _context;
+        private readonly IDestinationRepository _destinationRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IBucketListRepository _bucketListRepository;
 
-        public DestinationService(BucketListTravelDbContext context)
+        public DestinationService(
+            IDestinationRepository destinationRepository,
+            ICategoryRepository categoryRepository,
+            IBucketListRepository bucketListRepository)
         {
-            _context = context;
+            _destinationRepository = destinationRepository;
+            _categoryRepository = categoryRepository;
+            _bucketListRepository = bucketListRepository;
         }
 
         public async Task CreateDestinationAsync(CreateDestinationDto model, string userId)
@@ -28,36 +36,40 @@ namespace BucketListTravel.Services
                 OwnerId = userId
             };
 
-            await _context.Destinations.AddAsync(destination);
-            await _context.SaveChangesAsync();
+            await _destinationRepository.AddAsync(destination);
+            await _destinationRepository.SaveChangesAsync();
         }
 
         public async Task DeleteRangeAsync(IEnumerable<int> selectedIds, string userId)
         {
-            var destinations = await _context.Destinations.Where(d => selectedIds.Contains(d.Id) && d.OwnerId == userId).ToArrayAsync();
-            _context.Destinations.RemoveRange(destinations);
-            await _context.SaveChangesAsync();
+            var destinations = await _destinationRepository.All()
+                .Where(d => selectedIds.Contains(d.Id) && d.OwnerId == userId)
+                .ToArrayAsync();
+
+            _destinationRepository.RemoveRange(destinations);
+            await _destinationRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            IEnumerable<Category> categories = await _context.Categories
-                .AsNoTracking()
+            IEnumerable<Category> categories = await _categoryRepository
+                .AllAsNoTracking()
                 .OrderBy(c => c.Name)
                 .ToArrayAsync();
 
             return categories;
         }
 
-        public Task<bool> CategoryExistsAsync(int categoryId)
+        public async Task<bool> CategoryExistsAsync(int categoryId)
         {
-            return _context.Categories.AnyAsync(c => c.Id == categoryId);
+            return await _categoryRepository
+                .AllAsNoTracking()
+                .AnyAsync(c => c.Id == categoryId);
         }
 
         public async Task<IEnumerable<GetAllDestinationsDto>> GetAllDestinationsAsync(string? userId)
         {
-            IEnumerable<GetAllDestinationsDto> allDestinationsDtos = await _context.Destinations
-                .AsNoTracking()
+            IEnumerable<GetAllDestinationsDto> allDestinationsDtos = await _destinationRepository.AllAsNoTracking()
                 .OrderBy(d => d.Name)
                 .ThenBy(d => d.Country)
                 .Select(d => new GetAllDestinationsDto
@@ -67,7 +79,7 @@ namespace BucketListTravel.Services
                     Country = d.Country,
                     ImageUrl = d.ImageUrl,
                     CategoryName = d.Category.Name,
-                    IsInBucketList = _context.BucketListEntries.Any(ble => ble.DestinationId == d.Id && ble.UserId == userId)
+                    IsInBucketList = _bucketListRepository.AllAsNoTracking().Any(ble => ble.DestinationId == d.Id && ble.UserId == userId)
                 })
                 .ToArrayAsync();
 
@@ -76,8 +88,7 @@ namespace BucketListTravel.Services
 
         public async Task<IEnumerable<GetAllDestinationsDto>> GetMyDestinationsAsync(string userId)
         {
-            return await _context.Destinations
-                .AsNoTracking()
+            return await _destinationRepository.AllAsNoTracking()
                 .Where(d => d.OwnerId == userId)
                 .OrderBy(d => d.Name)
                 .ThenBy(d => d.Country)
@@ -89,17 +100,18 @@ namespace BucketListTravel.Services
                     ImageUrl = d.ImageUrl,
                     CategoryName = d.Category.Name,
 
-                    IsInBucketList = _context.BucketListEntries.Any(bl =>
-                        bl.DestinationId == d.Id &&
-                        bl.UserId == userId)
+                    IsInBucketList = _bucketListRepository
+                        .AllAsNoTracking()
+                        .Any(ble => 
+                            ble.DestinationId == d.Id && 
+                            ble.UserId == userId)
                 })
                 .ToArrayAsync();
         }
 
         public async Task<DestinationForEditDto?> GetDestinationByIdAsync(int id, string userId)
         {
-            DestinationForEditDto? destinationForEdit = await _context.Destinations
-                .AsNoTracking()
+            DestinationForEditDto? destinationForEdit = await _destinationRepository.AllAsNoTracking()
                 .Where(d => d.Id == id && d.OwnerId == userId)
                 .Select(d => new DestinationForEditDto
                 {
@@ -118,8 +130,7 @@ namespace BucketListTravel.Services
 
         public async Task<DestinationDetailsDto?> GetDestinationDetailsAsync(int id, string? userId)
         {
-            DestinationDetailsDto? destinationDetails = await _context.Destinations
-                .AsNoTracking()
+            DestinationDetailsDto? destinationDetails = await _destinationRepository.AllAsNoTracking()
                 .Where(d => d.Id == id)
                 .Select(d => new DestinationDetailsDto
                 {
@@ -129,7 +140,11 @@ namespace BucketListTravel.Services
                     Description = d.Description,
                     ImageUrl = d.ImageUrl,
                     CategoryName = d.Category.Name,
-                    IsInBucketList = _context.BucketListEntries.Any(ble => ble.DestinationId == d.Id && ble.UserId == userId)
+                    IsInBucketList = _bucketListRepository
+                        .AllAsNoTracking()
+                        .Any(ble => 
+                            ble.DestinationId == d.Id && 
+                            ble.UserId == userId)
                 })
                 .FirstOrDefaultAsync();
 
@@ -138,7 +153,7 @@ namespace BucketListTravel.Services
 
         public async Task<bool> UpdateDestinationAsync(UpdateDestinationDto model, string userId)
         {
-            var destination = await _context.Destinations
+            var destination = await _destinationRepository.All()
                 .FirstOrDefaultAsync(d => d.Id == model.Id && d.OwnerId == userId);
             
             if (destination == null)
@@ -152,7 +167,7 @@ namespace BucketListTravel.Services
             destination.ImageUrl = model.ImageUrl;
             destination.CategoryId = model.CategoryId;
 
-            await _context.SaveChangesAsync();
+            await _destinationRepository.SaveChangesAsync();
 
             return true;    
         }

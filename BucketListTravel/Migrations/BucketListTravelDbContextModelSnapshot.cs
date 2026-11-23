@@ -57,7 +57,7 @@ namespace BucketListTravel.Migrations
                     b.HasIndex("UserId", "DestinationId")
                         .IsUnique();
 
-                    b.ToTable("BucketListEntries", (string)null);
+                    b.ToTable("BucketListEntries");
                 });
 
             modelBuilder.Entity("BucketListTravel.Data.Models.Category", b =>
@@ -75,7 +75,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -126,7 +126,11 @@ namespace BucketListTravel.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -142,7 +146,7 @@ namespace BucketListTravel.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Destinations", (string)null);
+                    b.ToTable("Destinations");
 
                     b.HasData(
                         new
@@ -152,6 +156,7 @@ namespace BucketListTravel.Migrations
                             Country = "Greece",
                             Description = "Whitewashed villages, volcanic beaches, and spectacular sunsets over the Aegean Sea.",
                             ImageUrl = "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff",
+                            IsDeleted = false,
                             Name = "Santorini"
                         },
                         new
@@ -161,6 +166,7 @@ namespace BucketListTravel.Migrations
                             Country = "French Polynesia",
                             Description = "A turquoise lagoon surrounded by coral reefs and lush volcanic peaks.",
                             ImageUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+                            IsDeleted = false,
                             Name = "Bora Bora"
                         },
                         new
@@ -170,6 +176,7 @@ namespace BucketListTravel.Migrations
                             Country = "Canada",
                             Description = "Glacial lakes, alpine trails, and mountain scenery in the Canadian Rockies.",
                             ImageUrl = "https://images.unsplash.com/photo-1503614472-8c93d56e92ce",
+                            IsDeleted = false,
                             Name = "Banff National Park"
                         },
                         new
@@ -179,6 +186,7 @@ namespace BucketListTravel.Migrations
                             Country = "Ecuador",
                             Description = "Unique wildlife, volcanic landscapes, and extraordinary snorkeling opportunities.",
                             ImageUrl = "https://images.unsplash.com/photo-1544551763-46a013bb70d5",
+                            IsDeleted = false,
                             Name = "Galápagos Islands"
                         },
                         new
@@ -188,6 +196,7 @@ namespace BucketListTravel.Migrations
                             Country = "Switzerland",
                             Description = "An alpine base for paragliding, hiking, skiing, and breathtaking mountain views.",
                             ImageUrl = "https://images.unsplash.com/photo-1531366936337-7c912a4589a7",
+                            IsDeleted = false,
                             Name = "Interlaken"
                         },
                         new
@@ -197,6 +206,7 @@ namespace BucketListTravel.Migrations
                             Country = "New Zealand",
                             Description = "The adventure capital of New Zealand, surrounded by lakes and dramatic peaks.",
                             ImageUrl = "https://images.unsplash.com/photo-1469521669194-babb45599def",
+                            IsDeleted = false,
                             Name = "Queenstown"
                         },
                         new
@@ -206,6 +216,7 @@ namespace BucketListTravel.Migrations
                             Country = "Japan",
                             Description = "Historic temples, traditional gardens, and seasonal Japanese culture.",
                             ImageUrl = "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e",
+                            IsDeleted = false,
                             Name = "Kyoto"
                         },
                         new
@@ -215,6 +226,7 @@ namespace BucketListTravel.Migrations
                             Country = "Peru",
                             Description = "A remarkable Inca citadel set high in the Andes above the Sacred Valley.",
                             ImageUrl = "https://images.unsplash.com/photo-1526392060635-9d6019884377",
+                            IsDeleted = false,
                             Name = "Machu Picchu"
                         },
                         new
@@ -224,6 +236,7 @@ namespace BucketListTravel.Migrations
                             Country = "Spain",
                             Description = "Gaudí architecture, lively neighborhoods, Mediterranean beaches, and tapas.",
                             ImageUrl = "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
+                            IsDeleted = false,
                             Name = "Barcelona"
                         },
                         new
@@ -233,6 +246,7 @@ namespace BucketListTravel.Migrations
                             Country = "Türkiye",
                             Description = "A crossroads of continents known for its markets, mosques, and rich cuisine.",
                             ImageUrl = "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200",
+                            IsDeleted = false,
                             Name = "Istanbul"
                         });
                 });

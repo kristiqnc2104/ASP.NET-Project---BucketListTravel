@@ -26,6 +26,8 @@ namespace BucketListTravel.Data
             modelBuilder.ApplyConfiguration<Category>(catalogSeedConfiguration);
             modelBuilder.ApplyConfiguration<Destination>(catalogSeedConfiguration);
 
+            
+
             modelBuilder.Entity<BucketListEntry>()
                 .HasOne(e => e.Destination)
                 .WithMany(d => d.BucketListEntries)
@@ -49,6 +51,12 @@ namespace BucketListTravel.Data
                 .HasForeignKey(d => d.OwnerId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Destination>()
+                .HasQueryFilter(destination => !destination.IsDeleted);
+
+            modelBuilder.Entity<BucketListEntry>()
+                .HasQueryFilter(e => !e.Destination.IsDeleted);
         }
     }
 }

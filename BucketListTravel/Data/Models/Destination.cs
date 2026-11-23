@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using BucketListTravel.Common.Models;
 using static BucketListTravel.Common.EntityValidation;
 namespace BucketListTravel.Data.Models
 {
-    public class Destination
+    public class Destination : ISoftDeletableEntity
     {
         [Key]
         public int Id { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         [Required]
         [MaxLength(DestinationNameMaxLength)]

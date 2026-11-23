@@ -1,6 +1,7 @@
 ﻿using BucketListTravel.Common.Enums;
 using BucketListTravel.Data;
 using BucketListTravel.Data.Models;
+using BucketListTravel.Repository.Contracts;
 using BucketListTravel.Services.DTOs;
 using BucketListTravel.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,16 +10,20 @@ namespace BucketListTravel.Services
 {
     public class BucketListService : IBucketListService
     {
-        private readonly BucketListTravelDbContext _context;
+        private readonly IBucketListRepository _bucketListRepository;
+        private readonly IDestinationRepository _destinationRepository;
 
-        public BucketListService(BucketListTravelDbContext context)
+        public BucketListService(IBucketListRepository bucketListRepository,
+            IDestinationRepository destinationRepository)
         {
-            _context = context;
+            _bucketListRepository = bucketListRepository;
+            _destinationRepository = destinationRepository;
         }
 
         public async Task<bool> AddAsync(int destinationId, string userId)
         {
-            var destinationExists = await _context.Destinations
+            var destinationExists = await _destinationRepository
+                .AllAsNoTracking()
                 .AnyAsync(d => d.Id == destinationId);
             
             if (!destinationExists)
@@ -26,7 +31,8 @@ namespace BucketListTravel.Services
                 return false;
             }
 
-            var alreadyInList = await _context.BucketListEntries
+            var alreadyInList = await _bucketListRepository
+                .AllAsNoTracking()
                 .AnyAsync(e => e.DestinationId == destinationId && e.UserId == userId);
 
             if (alreadyInList)
@@ -42,11 +48,11 @@ namespace BucketListTravel.Services
                 UserId = userId
             };
 
-            _context.BucketListEntries.Add(entry);
+            await _bucketListRepository.AddAsync(entry);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bucketListRepository.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -58,8 +64,8 @@ namespace BucketListTravel.Services
 
         public async Task<IEnumerable<BucketListEntryDto>> GetAllAsync(string userId)
         {
-            IEnumerable<BucketListEntryDto> bucketListEntries = await _context.BucketListEntries
-                .AsNoTracking()
+            IEnumerable<BucketListEntryDto> bucketListEntries = await _bucketListRepository
+                .AllAsNoTracking()
                 .Where(e => e.UserId == userId)
                 .OrderByDescending(e => e.DateAdded)
                 .Select(e => new BucketListEntryDto
@@ -82,8 +88,8 @@ namespace BucketListTravel.Services
 
         public async Task<BucketListEntryForEditDto?> GetForEditAsync(int id, string userId)
         {
-            return await _context.BucketListEntries
-                .AsNoTracking()
+            return await _bucketListRepository
+                .AllAsNoTracking()
                 .Where(entry => entry.Id == id && entry.UserId == userId)
                 .Select(entry => new BucketListEntryForEditDto
                 {
@@ -98,7 +104,7 @@ namespace BucketListTravel.Services
 
         public async Task<bool> UpdateAsync(UpdateBucketListEntryDto dto, string userId)
         {
-            var entry = await _context.BucketListEntries
+            var entry = await _bucketListRepository.AllAsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == dto.Id && e.UserId == userId);
 
             if (entry == null)
@@ -110,22 +116,24 @@ namespace BucketListTravel.Services
             entry.PlannedDate = dto.Status == VisitStatus.Planned ? dto.PlannedDate : null;
             entry.Notes = dto.Notes;
 
-            await _context.SaveChangesAsync();
+            await _bucketListRepository.SaveChangesAsync();
+            
             return true;
         }
 
         public async Task<bool> RemoveAsync(int destinationId, string userId)
         {
-            var entry = await _context.BucketListEntries
+            var entry = await _bucketListRepository.AllAsNoTracking()
                 .FirstOrDefaultAsync(e => e.DestinationId == destinationId && e.UserId == userId);
 
             if (entry == null)
             {
                 return false;
             }
-
-            _context.BucketListEntries.Remove(entry);
-            await _context.SaveChangesAsync();
+            
+            _bucketListRepository.Remove(entry);
+            await _bucketListRepository.SaveChangesAsync();
+            
             return true;
         }
     }
