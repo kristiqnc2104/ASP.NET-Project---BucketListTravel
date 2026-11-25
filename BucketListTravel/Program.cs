@@ -41,7 +41,7 @@ namespace BucketListTravel
 
             builder.Services.AddScoped<IDestinationService, DestinationService>();
             builder.Services.AddScoped<IBucketListService, BucketListService>();
-
+            
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

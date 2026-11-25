@@ -1,4 +1,4 @@
-@model IEnumerable<BucketListTravel.ViewModels.BucketListEntries.AllBucketListEntriesIndexViewModel>
+@model BucketListTravel.ViewModels.Common.PaginatedViewModel<BucketListTravel.ViewModels.BucketListEntries.AllBucketListEntriesIndexViewModel>
 
 @{
     ViewData["Title"] = "My Bucket List";
@@ -9,13 +9,13 @@
         <h1 class="mb-1">My Bucket List</h1>
         <p class="text-muted mb-0">Keep track of the places you want to visit.</p>
     </div>
-    @if (Model.Any())
+    @if (Model.Items.Any())
     {
         <a asp-controller="Destination" asp-action="Index" class="btn btn-outline-secondary">Browse Destinations</a>
     }
 </div>
 
-@if (!Model.Any())
+@if (!Model.Items.Any())
 {
     <div class="card">
         <div class="card-body text-center py-5">
@@ -28,7 +28,7 @@
 else
 {
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-        @foreach (var item in Model)
+        @foreach (var item in Model.Items)
         {
             var statusClass = item.Status switch
             {
@@ -76,4 +76,6 @@ else
             </div>
         }
     </div>
+
+    <partial name="_PaginationPartial" model="Model" />
 }

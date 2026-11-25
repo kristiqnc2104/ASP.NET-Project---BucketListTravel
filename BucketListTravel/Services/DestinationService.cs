@@ -67,11 +67,23 @@ namespace BucketListTravel.Services
                 .AnyAsync(c => c.Id == categoryId);
         }
 
-        public async Task<IEnumerable<GetAllDestinationsDto>> GetAllDestinationsAsync(string? userId)
+        public async Task<PagedResultDto<GetAllDestinationsDto>> GetAllDestinationsAsync(string? userId, int pageNumber, int pageSize)
         {
-            IEnumerable<GetAllDestinationsDto> allDestinationsDtos = await _destinationRepository.AllAsNoTracking()
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            IQueryable<Destination> destinationsQuery = _destinationRepository.AllAsNoTracking();
+
+            int totalCount = await destinationsQuery.CountAsync();
+
+            IEnumerable<GetAllDestinationsDto> allDestinationsDtos = await destinationsQuery
                 .OrderBy(d => d.Name)
                 .ThenBy(d => d.Country)
+                .ThenBy(d => d.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(d => new GetAllDestinationsDto
                 {
                     Id = d.Id,
@@ -83,7 +95,11 @@ namespace BucketListTravel.Services
                 })
                 .ToArrayAsync();
 
-            return allDestinationsDtos;
+            return new PagedResultDto<GetAllDestinationsDto>
+            {
+                Items = allDestinationsDtos,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<IEnumerable<GetAllDestinationsDto>> GetMyDestinationsAsync(string userId)

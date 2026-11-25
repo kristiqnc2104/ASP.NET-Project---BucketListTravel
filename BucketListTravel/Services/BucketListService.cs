@@ -62,12 +62,24 @@ namespace BucketListTravel.Services
             return true;
         }
 
-        public async Task<IEnumerable<BucketListEntryDto>> GetAllAsync(string userId)
+        public async Task<PagedResultDto<BucketListEntryDto>> GetAllAsync(string userId, int pageNumber, int pageSize)
         {
-            IEnumerable<BucketListEntryDto> bucketListEntries = await _bucketListRepository
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            IQueryable<BucketListEntry> entriesQuery = _bucketListRepository
                 .AllAsNoTracking()
-                .Where(e => e.UserId == userId)
+                .Where(e => e.UserId == userId);
+
+            int totalCount = await entriesQuery.CountAsync();
+
+            IEnumerable<BucketListEntryDto> bucketListEntries = await entriesQuery
                 .OrderByDescending(e => e.DateAdded)
+                .ThenByDescending(e => e.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(e => new BucketListEntryDto
                 {
                     Id = e.Id,
@@ -83,7 +95,11 @@ namespace BucketListTravel.Services
                 })
                 .ToListAsync();
 
-            return bucketListEntries;
+            return new PagedResultDto<BucketListEntryDto>
+            {
+                Items = bucketListEntries,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<BucketListEntryForEditDto?> GetForEditAsync(int id, string userId)
@@ -104,7 +120,7 @@ namespace BucketListTravel.Services
 
         public async Task<bool> UpdateAsync(UpdateBucketListEntryDto dto, string userId)
         {
-            var entry = await _bucketListRepository.AllAsNoTracking()
+            var entry = await _bucketListRepository.All()
                 .FirstOrDefaultAsync(e => e.Id == dto.Id && e.UserId == userId);
 
             if (entry == null)
@@ -123,7 +139,7 @@ namespace BucketListTravel.Services
 
         public async Task<bool> RemoveAsync(int destinationId, string userId)
         {
-            var entry = await _bucketListRepository.AllAsNoTracking()
+            var entry = await _bucketListRepository.All()
                 .FirstOrDefaultAsync(e => e.DestinationId == destinationId && e.UserId == userId);
 
             if (entry == null)

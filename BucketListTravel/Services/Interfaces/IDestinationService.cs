@@ -12,7 +12,7 @@ namespace BucketListTravel.Services.Interfaces
 
         Task<bool> CategoryExistsAsync(int categoryId);
 
-        Task<IEnumerable<GetAllDestinationsDto>> GetAllDestinationsAsync(string? userId);
+        Task<PagedResultDto<GetAllDestinationsDto>> GetAllDestinationsAsync(string? userId, int pageNumber, int pageSize);
 
         Task<IEnumerable<GetAllDestinationsDto>> GetMyDestinationsAsync(string userId);
 

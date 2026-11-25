@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BucketListTravel.ViewModels.Destinations.AllDestinationsIndexViewModel>
+﻿@model BucketListTravel.ViewModels.Common.PaginatedViewModel<BucketListTravel.ViewModels.Destinations.AllDestinationsIndexViewModel>
 
 @{
     ViewData["Title"] = "Destinations";
@@ -10,18 +10,20 @@
     <a asp-action="Manage" class="btn btn-outline-secondary">Manage Destinations</a>
 </div>
 
-@if (!Model.Any())
+@if (!Model.Items.Any())
 {
     <div class="alert alert-info">No destinations yet.</div>
 }
 else
 {
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-        @foreach (var item in Model)
+        @foreach (var item in Model.Items)
         {
             <div class="col">
                 <partial name="_DestinationCardPartial" model="item" />
             </div>
         }
     </div>
+
+    <partial name="_PaginationPartial" model="Model" />
 }

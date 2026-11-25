@@ -1,5 +1,6 @@
 ﻿using BucketListTravel.Services.DTOs;
 using BucketListTravel.Services.Interfaces;
+using BucketListTravel.ViewModels.Common;
 using BucketListTravel.ViewModels.Destinations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,33 @@ namespace BucketListTravel.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            if (page < 1)
+            {
+                page = 1;
+            }
+
             var userId = GetCurrentUserId();
 
-            var destinations = await _destinationService.GetAllDestinationsAsync(userId);
+            PagedResultDto<GetAllDestinationsDto> pagedDestinations =
+                await _destinationService.GetAllDestinationsAsync(userId, page, DestinationsPerPage);
 
-            return View(MapToViewModels(destinations));
+            int totalPages = (int)Math.Ceiling(pagedDestinations.TotalCount / (double)DestinationsPerPage);
+
+            if (totalPages > 0 && page > totalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = totalPages });
+            }
+
+            var viewModel = new PaginatedViewModel<AllDestinationsIndexViewModel>
+            {
+                Items = MapToViewModels(pagedDestinations.Items),
+                CurrentPage = page,
+                TotalPages = totalPages
+            };
+
+            return View(viewModel);
         }
 
         [Authorize]

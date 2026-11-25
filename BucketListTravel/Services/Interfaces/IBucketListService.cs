@@ -4,7 +4,7 @@ namespace BucketListTravel.Services.Interfaces
 {
     public interface IBucketListService
     {
-        Task<IEnumerable<BucketListEntryDto>> GetAllAsync(string userId);
+        Task<PagedResultDto<BucketListEntryDto>> GetAllAsync(string userId, int pageNumber, int pageSize);
 
         Task<BucketListEntryForEditDto?> GetForEditAsync(int id, string userId);
 

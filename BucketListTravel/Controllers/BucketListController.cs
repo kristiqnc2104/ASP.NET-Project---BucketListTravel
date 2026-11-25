@@ -1,6 +1,7 @@
 ﻿using BucketListTravel.Services.DTOs;
 using BucketListTravel.Services.Interfaces;
 using BucketListTravel.ViewModels.BucketListEntries;
+using BucketListTravel.ViewModels.Common;
 using BucketListTravel.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 using static BucketListTravel.Common.UIConstants;
@@ -25,7 +26,7 @@ namespace BucketListTravel.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var userId = GetCurrentUserId();
 
@@ -34,9 +35,22 @@ namespace BucketListTravel.Controllers
                 return Challenge();
             }
 
-            IEnumerable<BucketListEntryDto> bucketListEntriesDtos = await _bucketListService.GetAllAsync(userId);
+            if (page < 1)
+            {
+                page = 1;
+            }
 
-            IEnumerable<AllBucketListEntriesIndexViewModel> allBucketListEntriesIndexViewModels = bucketListEntriesDtos
+            PagedResultDto<BucketListEntryDto> pagedEntries =
+                await _bucketListService.GetAllAsync(userId, page, BucketListEntriesPerPage);
+
+            int totalPages = (int)Math.Ceiling(pagedEntries.TotalCount / (double)BucketListEntriesPerPage);
+
+            if (totalPages > 0 && page > totalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = totalPages });
+            }
+
+            IEnumerable<AllBucketListEntriesIndexViewModel> allBucketListEntriesIndexViewModels = pagedEntries.Items
                 .Select(entry => new AllBucketListEntriesIndexViewModel
                 {
                     Id = entry.Id,
@@ -51,8 +65,14 @@ namespace BucketListTravel.Controllers
                     DateAdded = entry.DateAdded.ToString("yyyy-MM-dd")
                 });
 
+            var viewModel = new PaginatedViewModel<AllBucketListEntriesIndexViewModel>
+            {
+                Items = allBucketListEntriesIndexViewModels,
+                CurrentPage = page,
+                TotalPages = totalPages
+            };
 
-            return View(allBucketListEntriesIndexViewModels);
+            return View(viewModel);
         }
 
         [HttpGet]
